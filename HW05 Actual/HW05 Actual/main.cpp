@@ -41,22 +41,22 @@ template <typename T>
 class vector{
 private:
     int vSize;
-    int num;
+    int nums;
     T* elements;
+    
 public:
     vector<T>()
     {
-        vSize = 5;
-        for (int i=0; i<vSize; i++) {
-            elements[i] = 0;
-        }
+        T *vec = new T[vSize];
+        for(int i=0;i < vSize; i++)
+            vec[i]=0;
     }
     
     vector<T> (int size)
     {
-        vSize = this->size;
+        T *vec = new T[this->size];
         for(int i=0; i < vSize; i++)
-            elements[i]=0;
+            vec[i]=0;
     }
     
     vector<T> (int size, T defaultVal)
@@ -68,12 +68,12 @@ public:
     
     void ensureCapacity()
     {
-        if(num >= vSize)
+        if(nums >= vSize)
         {
             T *old = elements;
-            vSize = 2 * num;
+            vSize = 2 * nums;
             elements = new T[vSize];
-            for (int i = 0; i < num; i++)
+            for (int i = 0; i < nums; i++)
                 elements[i] = old[i];
             delete [] old;
     }
@@ -82,13 +82,13 @@ public:
     void push_back(T element)
     {
         ensureCapacity();
-        elements[num] = element;
-        num++;
+        elements[nums] = element;
+        nums++;
     }
     
     void pop_back()
     {
-        return elements[num-1];
+        return elements[nums-1];
     }
     
     unsigned const size()
@@ -126,7 +126,8 @@ public:
         for(int i=0; i<vSize;i++)
             elements[i]== v2.elements[i];
     }
-};*/
+};
+*/
 
 template <typename T>
 void shuffle(vector<T>& v)
@@ -135,16 +136,129 @@ void shuffle(vector<T>& v)
     for(int i=0; i<v.size(); i++)
     {
         int index = rand() % v.size();
-        for(int j=0; j<v.size(); j++)
-        {
-            if(v[index] != v[index+j])
-            {
-                v[i] = v[index];
-            }
-        }
+        T temp = v[index];
+        v[index]=v[i];
+        v[i]=temp;
     }
 }
+class Date
+{
+private:
+    int year;
+    int month;
+    int day;
+public:
+    Date()
+    {
+        year = 2000;
+        month = 1;
+        day = 1;
+    }
+    Date(int YEAR, int MONTH, int DAY)
+    {
+        year = YEAR;
+        month = MONTH;
+        day = DAY;
+    }
+};
+class Transaction
+{
+private:
+    Date date;
+    char type;
+    double amount;
+    double balance;
+    string description;
+public:
+    Transaction(char TYPE, double AMOUNT, double BALANCE, string description)
+    {
+        type = TYPE;
+        if(type == 'D')
+            balance += amount;
+        if(type == 'W')
+            balance -= amount;
+    }
+};
 
+class Account
+{
+private:
+    vector<Transaction> transactions;
+    int id;
+    double balance;
+    static double annualInterestRate;
+    string name;
+    int numOfTransactions = 0;
+    
+public:
+    Account(int ID, double startBalance, double startInterestRate)
+    {
+        id = ID;
+        balance = startBalance;
+        annualInterestRate = startInterestRate;
+    }
+    Account(string NAME, int ID, double startBalance, double startInterestRate)
+    {
+        name = NAME;
+        id = ID;
+        balance = startBalance;
+        annualInterestRate = startInterestRate;
+    }
+    string getName()
+    {
+        return name;
+    }
+    int getID()
+    {
+        return id;
+    }
+    double getBalance()
+    {
+        return balance;
+    }
+    double getInterestRate()
+    {
+        return annualInterestRate;
+    }
+    int getNumOfTransactions()
+    {
+        return numOfTransactions;
+    }
+    void setID(int newID)
+    {
+        id = newID;
+    }
+    void setBalance(double newBalance)
+    {
+        balance = newBalance;
+    }
+    void setInterestRate(double newInterestRate)
+    {
+        annualInterestRate = newInterestRate;
+    }
+    double getMonthlyInterestRate()
+    {
+        double monthlyRate = annualInterestRate/12;
+        return monthlyRate;
+    }
+    void withdraw(double amount)
+    {
+        balance -= amount;
+        numOfTransactions++;
+        transactions[numOfTransactions] = Transaction('W', amount, balance, "Withdrawel");
+    }
+    void deposit(double amount)
+    {
+        balance += amount;
+        numOfTransactions++;
+        transactions[numOfTransactions] = Transaction('D', amount, balance, "Deposit");
+    }
+    /*void printTransactions()
+    {
+        for(int i=0; i<numOfTransactions; i++)
+            //cout << ;
+    }*/
+};
 int main() {
     
 // Problem 11.2
@@ -173,17 +287,33 @@ int main() {
     cout << endl;
     
 //Problem 11.20
-    vector<int> nums(6);
-    for(int i=0; i<nums.size(); i++)
+    vector<int> nums(10);
+    //cout << "Enter 10 integers: ";
+    for(int i=0; i < nums.size(); i++)
         nums[i] = i;
-    for(int i=0; i<nums.size(); i++)
-        cout<< nums[i] << " ";
+    for(int i=0; i < nums.size(); i++)
+        cout << nums[i] << " ";
     cout << endl;
     shuffle(nums);
-    for(int i=0; i<nums.size(); i++)
+    for(int i=0; i < nums.size(); i++)
         cout<< nums[i] << " ";
+    cout << endl;
+
+//Problem 11.25
+    Account Acc1("George", 1122, 1000, 1.5);
+    Acc1.deposit(30);
+    Acc1.deposit(40);
+    Acc1.deposit(50);
+    Acc1.withdraw(5);
+    Acc1.withdraw(4);
+    Acc1.withdraw(2);
+    
+    cout << "Name: " << Acc1.getName() << endl;
+    cout << "Interest Rate: " << Acc1.getInterestRate() << endl;
+    cout << "Balance: " << Acc1.getBalance() << endl;
+    //Acc1.printTransactions();
+    cout << endl;
     
     return 0;
-    
 }
 
