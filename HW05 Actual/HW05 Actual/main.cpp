@@ -141,6 +141,7 @@ void shuffle(vector<T>& v)
         v[i]=temp;
     }
 }
+
 class Date
 {
 private:
@@ -161,6 +162,7 @@ public:
         day = DAY;
     }
 };
+
 class Transaction
 {
 private:
@@ -169,6 +171,7 @@ private:
     double amount;
     double balance;
     string description;
+    
 public:
     Transaction(char TYPE, double AMOUNT, double BALANCE, string description)
     {
@@ -178,6 +181,22 @@ public:
         if(type == 'W')
             balance -= amount;
     }
+    void printType()
+    {
+        cout << type << " ";
+    }
+    void printAmount()
+    {
+        cout << amount << " ";
+    }
+    void printBalance()
+    {
+        cout << balance << " ";
+    }
+    void printDescription()
+    {
+        cout << description << " ";
+    }
 };
 
 class Account
@@ -186,9 +205,9 @@ private:
     vector<Transaction> transactions;
     int id;
     double balance;
-    static double annualInterestRate;
+    double annualInterestRate;
     string name;
-    int numOfTransactions = 0;
+    int numOfTransactions;
     
 public:
     Account(int ID, double startBalance, double startInterestRate)
@@ -196,6 +215,7 @@ public:
         id = ID;
         balance = startBalance;
         annualInterestRate = startInterestRate;
+        numOfTransactions =0;
     }
     Account(string NAME, int ID, double startBalance, double startInterestRate)
     {
@@ -203,6 +223,7 @@ public:
         id = ID;
         balance = startBalance;
         annualInterestRate = startInterestRate;
+        numOfTransactions =0;
     }
     string getName()
     {
@@ -241,24 +262,33 @@ public:
         double monthlyRate = annualInterestRate/12;
         return monthlyRate;
     }
-    void withdraw(double amount)
+    void withdraw(double withdrawalAmount)
     {
-        balance -= amount;
+        //double change = balance - amount;
+        balance -= withdrawalAmount;
         numOfTransactions++;
-        transactions[numOfTransactions] = Transaction('W', amount, balance, "Withdrawel");
+        transactions.push_back(Transaction('W', withdrawalAmount, balance, "Withdraw"));
     }
-    void deposit(double amount)
+    void deposit(double depositAmount)
     {
-        balance += amount;
+        balance += depositAmount;
         numOfTransactions++;
-        transactions[numOfTransactions] = Transaction('D', amount, balance, "Deposit");
+        transactions.push_back(Transaction('D', depositAmount, balance, "Deposit"));
     }
-    /*void printTransactions()
+    
+    void printTransactions()
     {
         for(int i=0; i<numOfTransactions; i++)
-            //cout << ;
-    }*/
+        {
+            transactions.at(i).printType();
+            transactions.at(i).printAmount();
+            transactions.at(i).printBalance();
+            transactions.at(i).printBalance();
+            cout << endl;
+        }
+    }
 };
+    
 int main() {
     
 // Problem 11.2
@@ -297,10 +327,10 @@ int main() {
     shuffle(nums);
     for(int i=0; i < nums.size(); i++)
         cout<< nums[i] << " ";
-    cout << endl;
+    cout << "\n\n";
 
 //Problem 11.25
-    Account Acc1("George", 1122, 1000, 1.5);
+    Account Acc1("George", 1122, 1000.00, 1.5);
     Acc1.deposit(30);
     Acc1.deposit(40);
     Acc1.deposit(50);
@@ -311,9 +341,8 @@ int main() {
     cout << "Name: " << Acc1.getName() << endl;
     cout << "Interest Rate: " << Acc1.getInterestRate() << endl;
     cout << "Balance: " << Acc1.getBalance() << endl;
-    //Acc1.printTransactions();
+    Acc1.printTransactions();
     cout << endl;
     
     return 0;
 }
-
