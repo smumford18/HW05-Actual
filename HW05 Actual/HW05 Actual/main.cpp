@@ -12,6 +12,7 @@
 
 using namespace std;
 
+// Function of variable type that finds a specified item in an array of variable type
 template <typename T>
 int linearSearch(const T list[], T key, int arraysize)
 {
@@ -21,6 +22,7 @@ int linearSearch(const T list[], T key, int arraysize)
     return -1;
 }
 
+// Function of variable type that checks to see if an array of variable type is sorted or not
 template <typename T>
 bool isSorted(const T list[], int size)
 {
@@ -36,6 +38,9 @@ bool isSorted(const T list[], int size)
     
     return sorted;
 }
+
+// Class that defines a vector
+// Unable to complete, for the rest of the assignment, the built in vector class is used
 /*
 template <typename T>
 class vector{
@@ -54,14 +59,14 @@ public:
     
     vector<T> (int size)
     {
-        T *vec = new T[this->size];
+        T *vec = new T[size];
         for(int i=0; i < vSize; i++)
             vec[i]=0;
     }
     
     vector<T> (int size, T defaultVal)
     {
-        vSize = this->size;
+        vSize = size;
         for(int i=0; i < vSize; i++)
             elements[i] = defaultVal;
     }
@@ -96,7 +101,7 @@ public:
         return vSize;
     }
     
-    T const at(int index)
+    const T at(int index)
     {
         for(int i=0; i<vSize; i++)
         {
@@ -129,6 +134,7 @@ public:
 };
 */
 
+// Function of variable type that shuffles a vector
 template <typename T>
 void shuffle(vector<T>& v)
 {
@@ -142,6 +148,7 @@ void shuffle(vector<T>& v)
     }
 }
 
+// Class that defines a date
 class Date
 {
 private:
@@ -149,12 +156,14 @@ private:
     int month;
     int day;
 public:
+    // No arg constructor for date
     Date()
     {
         year = 2000;
         month = 1;
         day = 1;
     }
+    // Constructor for date
     Date(int YEAR, int MONTH, int DAY)
     {
         year = YEAR;
@@ -163,6 +172,7 @@ public:
     }
 };
 
+// Transaction class that allows for a deposit or withdrawel to be made from an account
 class Transaction
 {
 private:
@@ -173,27 +183,31 @@ private:
     string description;
     
 public:
-    Transaction(char TYPE, double AMOUNT, double BALANCE, string description)
+    // Constructor for a transaction
+    Transaction(char TYPE, double AMOUNT, double BALANCE, string DESCRIPTION)
     {
         type = TYPE;
-        if(type == 'D')
-            balance += amount;
-        if(type == 'W')
-            balance -= amount;
+        amount = AMOUNT;
+        balance = BALANCE;
+        description = DESCRIPTION;
     }
-    void printType()
+    // Function that outputs the type of the transaction
+    void printType() const
     {
         cout << type << " ";
     }
-    void printAmount()
+    // Function that outputs the amount of the transaction
+    void printAmount() const
     {
         cout << amount << " ";
     }
-    void printBalance()
+    // Function that outputs the balance of the account after the transaction
+    void printBalance() const
     {
         cout << balance << " ";
     }
-    void printDescription()
+    // Function that outputs the description of the transaction
+    void printDescription() const
     {
         cout << description << " ";
     }
@@ -210,6 +224,7 @@ private:
     int numOfTransactions;
     
 public:
+    // Constructor for an account
     Account(int ID, double startBalance, double startInterestRate)
     {
         id = ID;
@@ -217,6 +232,7 @@ public:
         annualInterestRate = startInterestRate;
         numOfTransactions =0;
     }
+    // Constructor for an account that has a name
     Account(string NAME, int ID, double startBalance, double startInterestRate)
     {
         name = NAME;
@@ -225,43 +241,53 @@ public:
         annualInterestRate = startInterestRate;
         numOfTransactions =0;
     }
+    // Getter function for the name
     string getName()
     {
         return name;
     }
+    // Getter function for the ID of the account
     int getID()
     {
         return id;
     }
+    // Getter function for the balance of the account
     double getBalance()
     {
         return balance;
     }
+    // Getter function for the interest rate of the account
     double getInterestRate()
     {
         return annualInterestRate;
     }
+    // Getter funciton for the number of transaction that the account has had
     int getNumOfTransactions()
     {
         return numOfTransactions;
     }
+    // Setter function for the ID of the account
     void setID(int newID)
     {
         id = newID;
     }
+    // Setter function for the balance of the account
     void setBalance(double newBalance)
     {
         balance = newBalance;
     }
+    // Setter function for the interest rate of the account
     void setInterestRate(double newInterestRate)
     {
         annualInterestRate = newInterestRate;
     }
+    // Getter function for the monthly interest of the account
     double getMonthlyInterestRate()
     {
         double monthlyRate = annualInterestRate/12;
         return monthlyRate;
     }
+    // Function that allows for a withdrawel to be made from the account
     void withdraw(double withdrawalAmount)
     {
         //double change = balance - amount;
@@ -269,22 +295,28 @@ public:
         numOfTransactions++;
         transactions.push_back(Transaction('W', withdrawalAmount, balance, "Withdraw"));
     }
+    // Function that allows for a deposit to be made into the account
     void deposit(double depositAmount)
     {
         balance += depositAmount;
         numOfTransactions++;
         transactions.push_back(Transaction('D', depositAmount, balance, "Deposit"));
     }
-    
+    // Function that outputs the transaction history of the account
     void printTransactions()
     {
         for(int i=0; i<numOfTransactions; i++)
         {
+            cout << "Transaction number " << i+1 << endl;
+            cout << "Transaction type: ";
             transactions.at(i).printType();
+            cout << "\nTransaction amount: ";
             transactions.at(i).printAmount();
+            cout << "\nAccount balance: ";
             transactions.at(i).printBalance();
-            transactions.at(i).printBalance();
-            cout << endl;
+            cout <<"\nTransaction Description ";
+            transactions.at(i).printDescription();
+            cout << "\n\n";
         }
     }
 };
@@ -331,16 +363,16 @@ int main() {
 
 //Problem 11.25
     Account Acc1("George", 1122, 1000.00, 1.5);
-    Acc1.deposit(30);
-    Acc1.deposit(40);
-    Acc1.deposit(50);
-    Acc1.withdraw(5);
-    Acc1.withdraw(4);
-    Acc1.withdraw(2);
+    Acc1.deposit(30.00);
+    Acc1.deposit(40.00);
+    Acc1.deposit(50.00);
+    Acc1.withdraw(5.00);
+    Acc1.withdraw(4.00);
+    Acc1.withdraw(2.00);
     
     cout << "Name: " << Acc1.getName() << endl;
     cout << "Interest Rate: " << Acc1.getInterestRate() << endl;
-    cout << "Balance: " << Acc1.getBalance() << endl;
+    cout << "Balance: " << Acc1.getBalance() << "\n\n";
     Acc1.printTransactions();
     cout << endl;
     
